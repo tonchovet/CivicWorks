@@ -1,0 +1,151 @@
+🏛️ CivicWorks Platform
+
+Democracia Directa, Transparencia y Gestión Inteligente de Obras Públicas
+
+📖 Visión del Proyecto
+
+CivicWorks es una plataforma Full-Stack diseñada para descentralizar y democratizar la gestión de obras públicas municipales. El objetivo principal es eliminar la burocracia y la opacidad en la asignación de presupuestos, permitiendo que los ciudadanos propongan, debatan y validen las mejoras en sus propias comunidades.
+
+A diferencia de los sistemas tradicionales, CivicWorks introduce un modelo de Licitación Participativa y Ejecución basada en Smart Contracts (Simulados), asegurando que los fondos solo se liberen a la empresa constructora cuando la ciudadanía certifica que la obra ha sido finalizada satisfactoriamente.
+
+🚀 Características Principales
+
+🌍 Para Ciudadanos
+
+Geolocalización de Propuestas: Creación de propuestas de obra (bacheo, luminarias, plazas) seleccionando la ubicación exacta en un mapa interactivo.
+
+Geofencing Social: Lógica de negocio que asegura que solo los residentes de una localidad específica puedan votar en proyectos de su zona.
+
+Votación de Presupuestos: Capacidad de elegir no solo la obra, sino qué empresa la realizará basándose en costo/beneficio.
+
+Validación de Ejecución: Votación final de conformidad (👍/👎). Los ciudadanos actúan como auditores de la obra terminada.
+
+🏢 Para Empresas
+
+Perfil Corporativo: Gestión de identidad y reputación.
+
+Gestión de Equipos: Alta de empleados con autocompletado inteligente basado en la base de datos de usuarios.
+
+Licitación Digital: Envío de propuestas formales (con montos, PDFs técnicos, audios explicativos) directamente en el chat del proyecto.
+
+Liberación de Fondos Automática: Si la obra cumple con los estándares de validación ciudadana, el sistema libera el pago automáticamente.
+
+💬 Comunicación Real-Time
+
+Feed Segmentado: Vistas diferenciadas para Ciudadanos (interés general) y Empresas (sus propuestas).
+
+Chat Multimedia: Soporte para texto, imágenes, audio y documentos PDF para enriquecer el debate técnico.
+
+🛠️ Arquitectura y Tecnologías
+
+El proyecto sigue una arquitectura de monorepo dividida en backend y frontend, priorizando la escalabilidad y la separación de responsabilidades.
+
+🔙 Backend (Spring Boot 3.1 + Java 17)
+
+Core: Spring Web MVC para la exposición de API RESTful.
+
+Persistencia: * MySQL: Para datos transaccionales críticos (Usuarios, Proyectos, Votos, Transacciones financieras).
+
+Redis: Para caché de alto rendimiento en el feed de noticias y almacenamiento temporal de sesiones de chat.
+
+Lógica de Negocio: Servicios dedicados para la gestión de estados complejos del proyecto (PROPOSED -> IN_PROGRESS -> VALIDATION -> COMPLETED).
+
+Seguridad: Validación de roles (CITIZEN vs COMPANY) y restricciones geográficas.
+
+📱 Frontend (Flutter 3.x)
+
+UI/UX: Diseño Material 3 adaptativo.
+
+Mapas: Integración con flutter_map y OpenStreetMap para renderizado geoespacial sin costos de API propietarios.
+
+State Management: Uso de Provider para una gestión de estado limpia y reactiva.
+
+Http Services: Capa de abstracción para la comunicación con el Backend.
+
+🔄 Flujo Lógico y "Smart Contract"
+
+Uno de los puntos más fuertes de CivicWorks es su lógica de estados, diseñada para simular un contrato inteligente de cumplimiento:
+
+Propuesta: Un ciudadano crea una necesidad en el mapa.
+
+Licitación: Las empresas envían propuestas de presupuesto en el chat.
+
+Adjudicación (Quorum 80%): Si una propuesta económica alcanza el 80% de los votos del padrón local, gana la licitación. El estado cambia a IN_PROGRESS.
+
+Ejecución: La empresa trabaja. Al terminar, solicita la validación. El estado cambia a VALIDATION_PHASE.
+
+Certificación Ciudadana: Los vecinos votan si la obra está bien hecha.
+
+Liberación de Fondos: > IF (Votos_Positivos > 50% del Padrón) THEN (Transferir Fondos & Cerrar Proyecto)
+
+Este ciclo garantiza que el dinero solo se mueva si hay consenso social.
+
+🧪 Casos de Uso (User Stories)
+
+Caso 1: El Ciudadano Activo (Juan)
+
+"Como vecino de Rosario, quiero que arreglen la plaza de mi barrio."
+
+Juan abre la app, va al mapa y hace clic en la plaza.
+
+El sistema autocompleta la dirección. Juan sube una descripción.
+
+La propuesta aparece en el Feed de todos los vecinos de Rosario.
+
+Juan recibe notificaciones cuando las empresas ofertan precios y vota por la más razonable.
+
+Meses después, Juan recibe una alerta: "Obra finalizada". Va a la plaza, ve que quedó bien y vota "CONFORME" en la app.
+
+Caso 2: La Empresa Constructora (Constructora S.A.)
+
+"Como empresa, quiero encontrar obras para realizar y gestionar a mi equipo."
+
+El gerente entra a su perfil y agrega a sus ingenieros usando el buscador por email.
+
+Ve en su feed "Mis Propuestas" y el feed global de su zona.
+
+Entra a un proyecto, adjunta un PDF con los planos y cotiza $1,000,000 marcando el mensaje como "Propuesta Formal".
+
+Al ganar, ejecuta la obra. Al terminar, presiona "Solicitar Validación" en la app para desbloquear el pago.
+
+⚙️ Instalación y Despliegue
+
+Requisitos Previos
+
+Java JDK 17
+
+Flutter SDK
+
+Docker & Docker Compose (para bases de datos)
+
+Pasos
+
+Levantar Infraestructura:
+
+docker-compose up -d
+# Esto inicia MySQL en el puerto 3307 y Redis en el 6379
+
+
+Iniciar Backend:
+
+cd backend
+./mvnw spring-boot:run
+
+
+Iniciar App Móvil:
+
+cd frontend
+flutter pub get
+flutter run
+
+
+🔮 Futuras Mejoras
+
+Blockchain Real: Migrar la lógica del Smart Contract de Java a Solidity (Ethereum) o Stellar para trazabilidad inmutable de fondos.
+
+Identidad Digital: Integración con APIs gubernamentales para validar identidad real (Renaper/DNI).
+
+Pagos: Integración con pasarelas de pago reales o wallets cripto.
+
+Autor: [Tu Nombre]
+Desarrollado como proyecto de innovación cívica y demostración de arquitectura Full-Stack.
